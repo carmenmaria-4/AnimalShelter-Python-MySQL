@@ -68,7 +68,7 @@ Urmează acești pași pentru a rula proiectul pe instanța ta locală:
 În terminal, instalează bibliotecile necesare rulând:
 ```bash
 pip install flask flask-mysqldb pymysql
-
+```
 ### Pasul 3: Popularea cu date
 Înainte de a porni site-ul, rulează scripturile de populare pentru a genera datele de test:
 python populare_adapost1_new.py
@@ -78,8 +78,9 @@ python populare_voluntari.py
 
 ### Pasul 4: Pornirea aplicatiei
 Lanseaza serverul Flask
+```bash
 python app.py
-
+```
 Accesează în browser adresa: http://127.0.0.1:5000
 
 
