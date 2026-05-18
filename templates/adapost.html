@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - {{ adapost.Nume_Adapost }}</title>
+    <style>
+        :root {
+            --primary: #27ae60;
+            --primary-dark: #219150;
+            --secondary: #34495e;
+            --dark: #2c3e50;
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+            --shadow: 0 4px 15px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body { 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            margin: 0; 
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); 
+            color: #333; 
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Navizare */
+        .back-nav { margin-bottom: 30px; }
+        .back-nav a { 
+            text-decoration: none; 
+            color: var(--secondary); 
+            font-weight: 600; 
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: var(--white);
+            border-radius: 50px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        .back-nav a:hover { 
+            transform: translateX(-5px);
+            background: #eee; 
+        }
+
+        /* Header Card */
+        .header-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+            border-left: 10px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-card h1 { 
+            color: var(--dark); 
+            margin: 0 0 10px 0; 
+            font-size: 2.2rem;
+        }
+        
+        .adresa { 
+            color: #7f8c8d; 
+            font-size: 1.1rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Statistici Section */
+        h3 { 
+            color: var(--dark); 
+            font-weight: 600; 
+            margin-bottom: 20px; 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stat-container { 
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-box { 
+            background: var(--white); 
+            padding: 25px; 
+            border-radius: 15px; 
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .stat-box:hover { 
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .stat-box strong { 
+            font-size: 3rem; 
+            display: block; 
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            font-weight: 700;
+            color: #95a5a6;
+        }
+
+        /* Butoane de Actiune */
+        .actions {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .btn-main {
+            background: var(--primary); 
+            color: white; 
+            padding: 18px 40px; 
+            text-decoration: none; 
+            border-radius: 50px; 
+            font-weight: 800; 
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 20px rgba(39, 174, 96, 0.3);
+            transition: var(--transition);
+        }
+        .btn-main:hover { 
+            background: var(--primary-dark); 
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(39, 174, 96, 0.4);
+        }
+
+        /* Sectiune Adoptii */
+        .btn-toggle {
+            background: var(--secondary); 
+            color: white; 
+            padding: 12px 25px; 
+            border: none; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition);
+            display: block;
+            margin: 20px auto;
+        }
+        .btn-toggle:hover { background: var(--dark); }
+
+        #zonaAdoptii { 
+            display: none; 
+            background: var(--white); 
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: var(--shadow);
+            margin-top: 30px;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+        th { 
+            padding: 15px; 
+            text-align: left; 
+            color: #95a5a6; 
+            text-transform: uppercase; 
+            font-size: 0.8rem; 
+            border-bottom: 2px solid #eee;
+        }
+        td { padding: 15px; border-bottom: 1px solid #f1f1f1; }
+        tr:last-child td { border-bottom: none; }
+        
+        .badge-animal {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            .header-card { padding: 25px; }
+            .header-card h1 { font-size: 1.6rem; }
+            .stat-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav class="back-nav">
+            <a href="/">⬅ Schimbă Centrul</a>
+        </nav>
+
+        <header class="header-card">
+            <h1>{{ adapost.Nume_Adapost }}</h1>
+            <p class="adresa">📍 {{ adapost.Adresa }}</p>
+        </header>
+
+        <section>
+            <h3>📊 Disponibilitate Curentă</h3>
+            <div class="stat-container">
+                {% if stats %}
+                    {% for s in stats %}
+                        <div class="stat-box">
+                            <strong>{{ s.nr }}</strong>
+                            <div class="stat-label">
+                                {% if s.Specie == 'Caine' %} 🐕 
+                                {% elif s.Specie == 'Pisica' %} 🐈 
+                                {% elif s.Specie == 'Iepure' %} 🐇
+                                {% elif s.Specie == 'Papagal' %} 🦜
+                                {% else %} 🐾 {% endif %}
+                                {{ s.Specie }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="stat-box" style="grid-column: 1/-1;">
+                        <p>Nu sunt animale disponibile momentan.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <div class="actions">
+            <a href="{{ url_for('animale', id_adapost=adapost.ID_Adapost) }}" class="btn-main">
+                🐾 Vezi Lista și Adoptă
+            </a>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #dcdde1; margin: 50px 0;">
+
+        <section>
+            <h3 style="justify-content: center;">🎉 Povești cu Final Fericit</h3>
+            
+            {% if recent %}
+                <button type="button" class="btn-toggle" onclick="toggleAdoptii()" id="btnText">
+                    🔍 Vezi ultimele adopții
+                </button>
+
+                <div id="zonaAdoptii">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Animal</th>
+                                <th>Stăpân Nou</th>
+                                <th>Dată Finalizare</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in recent %}
+                            <tr>
+                                <td><span class="badge-animal">{{ r.Animal }}</span></td>
+                                <td><strong>{{ r.Stapan }}</strong></td>
+                                <td><small>📅 {{ r.Data_Adoptie }}</small></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p style="text-align: center; color: #7f8c8d;"><em>Nicio adopție înregistrată recent în acest centru.</em></p>
+            {% endif %}
+        </section>
+    </div>
+
+    <script>
+        function toggleAdoptii() {
+            var x = document.getElementById("zonaAdoptii");
+            var btn = document.getElementById("btnText");
+            
+            if (x.style.display === "none" || x.style.display === "") {
+                x.style.display = "block";
+                btn.innerHTML = "🙈 Ascunde lista adopțiilor";
+                btn.style.background = "#e74c3c";
+            } else {
+                x.style.display = "none";
+                btn.innerHTML = "🔍 Vezi ultimele adopții";
+                btn.style.background = "#34495e";
+            }
+        }
+    </script>
+
+</body>
+</html>

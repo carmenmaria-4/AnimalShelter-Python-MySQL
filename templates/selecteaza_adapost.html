@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopții România | Acasă</title>
+    <style>
+        :root { --primary: #27ae60; --secondary: #3498db; --dark: #2c3e50; --heart: #e74c3c; --blue: #3b71fe; --glass: rgba(255, 255, 255, 0.95); --purple: #8e44ad; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f5f7fa; display: flex; flex-direction: column; min-height: 100vh; }
+
+        .header-section { background: var(--dark); color: white; padding: 25px 0; text-align: center; }
+
+        .about-banner {
+            max-width: 800px; 
+            margin: -25px auto 30px; 
+            background: var(--glass);
+            border-radius: 15px; 
+            padding: 25px 35px; 
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            position: relative; 
+            z-index: 10;
+        }
+
+        .donate-side-btn {
+            position: fixed; right: 0; top: 50%; transform: translateY(-50%);
+            background: var(--heart); color: white; padding: 15px 25px;
+            border-radius: 30px 0 0 30px; text-decoration: none; font-weight: bold;
+            z-index: 999; animation: heartbeat 1.5s infinite;
+        }
+        @keyframes heartbeat { 
+            0% { transform: translateY(-50%) scale(1); } 
+            50% { transform: translateY(-50%) scale(1.08); } 
+            100% { transform: translateY(-50%) scale(1); } 
+        }
+
+        .modal-donation {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); display: none; z-index: 1000;
+            justify-content: center; align-items: center;
+        }
+        .modal-donation:target { display: flex; }
+        .donation-card { background: white; width: 850px; border-radius: 20px; display: flex; overflow: hidden; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        
+        .don-left { width: 45%; border-right: 1px solid #f0f0f0; display: flex; flex-direction: column; }
+        .don-left img { width: 100%; height: 260px; object-fit: cover; }
+        .don-left-content { padding: 25px; }
+
+        .don-right { width: 55%; padding: 40px; }
+        .price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
+        .price-item { 
+            border: 1px solid #ddd; padding: 12px; text-align: center; border-radius: 8px; 
+            font-weight: bold; cursor: pointer; transition: 0.2s; background: white;
+            font-family: inherit; font-size: 0.9rem;
+        }
+        .price-item:hover, .price-item.active { border-color: var(--blue); color: var(--blue); background: #f0f4ff; }
+
+        .input-nume {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-family: inherit;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+            margin-top: 5px;
+        }
+        .input-nume:focus {
+            border-color: var(--blue);
+            outline: none;
+        }
+
+        .stats-section { background: var(--dark); color: white; padding: 60px 0; margin-top: 50px; }
+        .stats-grid { display: flex; justify-content: space-around; max-width: 1100px; margin: 0 auto; text-align: center; }
+        .stat-box h2 { font-size: 3.5rem; color: var(--primary); margin: 0; }
+
+        .card-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 40px; max-width: 1200px; margin: 0 auto; flex-grow: 1; }
+        .adapost-card { background: white; border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.05); border-top: 5px solid var(--primary); transition: 0.3s; }
+        .adapost-card:hover { transform: translateY(-10px); }
+    </style>
+</head>
+<body>
+
+    <a href="#doneaza" class="donate-side-btn">❤️ DONEAZĂ</a>
+
+    <div id="doneaza" class="modal-donation">
+        <div class="donation-card">
+            <a href="#" style="position:absolute; right:20px; top:15px; font-size:35px; text-decoration:none; color:#bbb;">&times;</a>
+            <div class="don-left">
+                <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=600" alt="Cățeluș fericit">
+                <div class="don-left-content">
+                    <h3 style="margin-top:0;">Susține viitorul lor!</h3>
+                    <p style="font-size: 0.85rem; color: #666; line-height: 1.5;">
+                        Fiecare contribuție ne ajută să oferim condiții mai bune pentru sufletele din grija noastră.
+                    </p>
+                </div>
+            </div>
+            <div class="don-right">
+                <h3 style="margin-top:0;">🛡️ Donație Securizată</h3>
+                
+                <form action="{{ url_for('inregistreaza_donatie') }}" method="POST">
+                    <input type="hidden" name="id_adapost" value="1">
+                    <input type="hidden" id="selected_amount" name="suma" value="50">
+
+                    <div style="margin-bottom: 20px;">
+                        <label style="font-size: 0.9rem; color: #555; font-weight: 600;">Numele tău (sau lasă gol pentru anonim):</label>
+                        <input type="text" name="nume_donator" placeholder="Ex: Popescu Ionuț" class="input-nume">
+                    </div>
+
+                    <p style="font-size: 0.9rem; margin-bottom: 10px; color: #555;">Alege suma:</p>
+                    <div class="price-grid">
+                        <button type="button" class="price-item" onclick="selectAmount(this, 200)">200 lei</button>
+                        <button type="button" class="price-item" onclick="selectAmount(this, 100)">100 lei</button>
+                        <button type="button" class="price-item active" onclick="selectAmount(this, 50)">50 lei</button>
+                        <button type="button" class="price-item" onclick="selectAmount(this, 20)">20 lei</button>
+                        <button type="button" class="price-item" onclick="selectAmount(this, 10)">10 lei</button>
+                    </div>
+
+                    <div style="margin-top:20px;">
+                        <label style="font-size: 0.8rem; color: #888;">Destinație donație</label>
+                        <select name="scop" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ddd; margin-top:5px; font-family: inherit;">
+                            <option>Susținerea adăpostului (General)</option>
+                            <option>Hrană și îngrijire zilnicica</option>
+                            <option>Urgențe medicale și tratamente</option>
+                            <option>Alte cauze speciale</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" style="width:100%; padding:16px; background:var(--blue); color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:20px; font-size:1.1rem; font-family: inherit;">
+                        Donează
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-section">
+        <h2 style="letter-spacing: 2px; margin:0;">ADOPȚII ROMÂNIA</h2>
+    </div>
+
+    <div class="about-banner">
+        <div>
+            <h2 style="color:var(--blue); margin:0 0 5px 0;">📊 Gestiune Centralizată Centru</h2>
+            <p style="margin:0 0 15px 0; color:#555; font-size: 0.95rem;">Panou administrativ pentru voluntari și monitorizare medicală avansată.</p>
+            <a href="{{ url_for('lista_voluntari') }}" style="background:var(--dark); color:white; padding:11px 24px; border-radius:50px; text-decoration:none; font-weight:bold; font-size: 0.85rem; display: inline-block; margin-right: 8px;">Echipa Voluntari</a>
+            <a href="/dashboard-medical" style="background:var(--purple); color:white; padding:11px 24px; border-radius:50px; text-decoration:none; font-weight:bold; font-size: 0.85rem; display: inline-block; box-shadow: 0 4px 10px rgba(142, 68, 173, 0.2);">Raport Medical Live</a>
+        </div>
+    </div>
+
+    <div class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-box"><h2 class="counter" data-target="{{ stats.salvati }}">0</h2><p>animale salvate+</p></div>
+            <div class="stat-box"><h2 class="counter" data-target="{{ stats.in_adapost }}">0</h2><p>în adăpost+</p></div>
+            <div class="stat-box"><h2 class="counter" data-target="{{ stats.adoptati }}">0</h2><p>adoptați+</p></div>
+        </div>
+    </div>
+
+    <h1 style="text-align:center; color:var(--dark); margin-top:50px; font-weight:300;">🏠 Selectează un centru</h1>
+
+    <div class="card-container">
+        {% for a in adaposturi %}
+        <div class="adapost-card">
+            <div style="font-size:3.5rem; margin-bottom:10px;">🏘️</div>
+            <h3>{{ a.Nume_Adapost }}</h3>
+            <p>📍 {{ a.Adresa }}</p>
+            <a href="{{ url_for('detalii_adapost', id_adapost=a.ID_Adapost) }}" style="display:block; background:var(--primary); color:white; padding:13px; border-radius:10px; text-decoration:none; font-weight:bold; margin-top:20px;">Deschide Panoul</a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        function selectAmount(btn, val) {
+            document.querySelectorAll('.price-item').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('selected_amount').value = val;
+        }
+
+        const counters = document.querySelectorAll('.counter');
+        const speed = 100;
+        const updateCount = (counter) => {
+            const target = +counter.getAttribute('data-target');
+            const count = +counter.innerText.replace(/,/g, '');
+            const inc = target / speed;
+            if (count < target) {
+                counter.innerText = Math.ceil(count + inc).toLocaleString();
+                setTimeout(() => updateCount(counter), 20);
+            } else {
+                counter.innerText = target.toLocaleString();
+            }
+        };
+        const observer = new IntersectionObserver((entries) => {
+            if(entries[0].isIntersecting) {
+                counters.forEach(counter => updateCount(counter));
+            }
+        }, { threshold: 0.5 });
+        observer.observe(document.querySelector('.stats-section'));
+    </script>
+</body>
+</html>

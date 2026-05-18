@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animale Disponibile - {{ id_adapost }}</title>
+    <style>
+        :root {
+            --primary: #27ae60;
+            --secondary: #3498db;
+            --dark: #2c3e50;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light-bg: #f4f7f6;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            margin: 0; 
+            padding: 40px; 
+            background-color: var(--light-bg); 
+            color: #333; 
+        }
+
+        .container { 
+            max-width: 1100px; 
+            margin: auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .btn-back-top {
+            text-decoration: none;
+            background: #eee;
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: var(--dark);
+            font-weight: bold;
+            border: 1px solid #ccc;
+            transition: 0.3s;
+        }
+
+        .btn-back-top:hover {
+            background: #e0e0e0;
+        }
+
+        h1 { 
+            color: var(--dark); 
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .flash-message {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            text-align: left;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(39, 174, 96, 0.2);
+            border-left: 5px solid #1e8449;
+        }
+
+        .filter-bar { 
+            background: #ffffff; 
+            padding: 20px; 
+            border-radius: 12px; 
+            margin-bottom: 30px; 
+            border: 1px solid #e1e4e8; 
+            display: flex; 
+            justify-content: center; 
+        }
+
+        .filter-form { 
+            display: flex; 
+            gap: 15px; 
+            align-items: center; 
+            flex-wrap: wrap;
+        }
+
+        select, button { 
+            padding: 12px 15px; 
+            border-radius: 8px; 
+            border: 1px solid #ddd; 
+            font-size: 14px; 
+        }
+
+        button { 
+            background-color: var(--primary); 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            font-weight: bold;
+            padding: 12px 25px;
+        }
+
+        button:hover { 
+            background-color: #219150; 
+            transform: translateY(-2px);
+        }
+
+        .table-responsive { overflow-x: auto; }
+
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 10px; 
+        }
+
+        th { 
+            background-color: var(--dark); 
+            color: white; 
+            padding: 18px; 
+            text-align: left; 
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        td { 
+            padding: 18px; 
+            border-bottom: 1px solid #eee; 
+            vertical-align: middle;
+        }
+
+        tr:hover { background-color: #fcfcfc; }
+
+        .animal-info { display: flex; align-items: center; gap: 15px; }
+        
+        .animal-icon { 
+            font-size: 2rem; 
+            background: #f0f2f5;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .btn-adopt { 
+            background: var(--secondary); 
+            color: white; 
+            padding: 10px 20px; 
+            border-radius: 50px; 
+            text-decoration: none; 
+            font-weight: bold; 
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .medical-link { 
+            display: inline-block; 
+            font-size: 0.8em; 
+            color: var(--warning); 
+            text-decoration: none; 
+            margin-top: 6px; 
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <!-- Navigare sus -->
+    <div class="header-top">
+        <a href="{{ url_for('detalii_adapost', id_adapost=id_adapost) }}" class="btn-back-top">
+            ⬅ Înapoi la Panou
+        </a>
+        <h1>🐾 Animale disponibile</h1>
+    </div>
+
+    <!-- Mesaje Flash sub titlu -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="flash-message">
+            ✅ {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="filter-bar">
+        <form method="GET" action="{{ url_for('animale', id_adapost=id_adapost) }}" class="filter-form">
+            <select name="specie">
+                <option value="">Toate speciile</option>
+                <option value="Caine" {% if f_specie == 'Caine' %}selected{% endif %}>🐕 Câini</option>
+                <option value="Pisica" {% if f_specie == 'Pisica' %}selected{% endif %}>🐈 Pisici</option>
+            </select>
+
+            <select name="varsta">
+                <option value="">Orice vârstă</option>
+                <option value="pui" {% if f_varsta == 'pui' %}selected{% endif %}>Pui (0-2 ani)</option>
+                <option value="adult" {% if f_varsta == 'adult' %}selected{% endif %}>Adulți (3-7 ani)</option>
+                <option value="senior" {% if f_varsta == 'senior' %}selected{% endif %}>Seniori (8+ ani)</option>
+            </select>
+
+            <button type="submit">🔍 Filtrează</button>
+            <a href="{{ url_for('animale', id_adapost=id_adapost) }}" style="color:var(--danger); text-decoration:none; font-size:14px; font-weight:bold;">Reset</a>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nume & Sănătate</th>
+                    <th>Specie</th>
+                    <th>Vârstă</th>
+                    <th>Acțiune</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for animal in animale %}
+                <tr>
+                    <td>
+                        <div class="animal-info">
+                            <div class="animal-icon">
+                                {% if animal.Specie == 'Caine' %}🐕
+                                {% elif animal.Specie == 'Pisica' %}🐈
+                                {% else %}🐾{% endif %}
+                            </div>
+                            <div>
+                                <strong>{{ animal.Nume }}</strong>
+                                <br>
+                                <a href="{{ url_for('fisa_medicala', id_animal=animal.ID_Animal) }}" class="medical-link">
+                                    ✚ Istoric Medical
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{ animal.Specie }}</td>
+                    <td>{{ animal.Varsta }} ani</td>
+                    <td>
+                        <a href="{{ url_for('proces_adoptie', id_animal=animal.ID_Animal) }}" class="btn-adopt">
+                            Adoptă-mă
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" style="text-align:center; padding: 50px; color: #7f8c8d;">
+                        Momentan nu sunt animale care să corespundă căutării.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

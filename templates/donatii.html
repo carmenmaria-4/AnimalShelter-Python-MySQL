@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Istoric Donații | Adopții România</title>
+    <style>
+        :root { --primary: #27ae60; --dark: #2c3e50; --blue: #3b71fe; --bg: #f5f7fa; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 40px; color: var(--dark); }
+        .container { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        h1 { border-bottom: 2px solid var(--blue); padding-bottom: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .total-card { background: #eef2ff; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 30px; border-left: 5px solid var(--blue); }
+        .total-amount { font-size: 2.5rem; color: var(--blue); font-weight: bold; display: block; margin-top: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; }
+        thead tr { background: var(--dark); color: white; }
+        th { padding: 15px; text-align: left; font-weight: 600; }
+        td { padding: 15px; border-bottom: 1px solid #eee; }
+        tr:hover { background: #f9f9fb; }
+        .badge-scop { background: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; font-weight: 500; }
+        .back-link { display: inline-block; margin-top: 30px; color: var(--blue); text-decoration: none; font-weight: bold; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>💰 Istoric Donații</h1>
+    
+    <div class="total-card">
+        <h3>Total colectat prin platformă</h3>
+        <span class="total-amount">{{ total }} lei</span>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Donator</th>
+                <th>Sumă (lei)</th>
+                <th>Centru Beneficiar</th>
+                <th>Scop Donație</th>
+                <th>Data</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in donatii %}
+            <tr>
+                <td>
+                    <strong>
+                        {% if d.Nume_Donator %}{{ d.Nume_Donator }}
+                        {% elif d.Nume %}{{ d.Nume }}
+                        {% else %}Donator Anonim{% endif %}
+                    </strong>
+                </td>
+                <td style="color: var(--primary); font-weight: bold;">{{ d.Suma }} lei</td>
+                <td>📍 {{ d.Nume_Adapost }}</td>
+                <td><span class="badge-scop">{{ d.Scop_Donatie }}</span></td>
+                <td style="color: #888; font-size: 0.9rem;">
+                    {{ d.Data_Donatie.strftime('%d.%m.%Y %H:%M') if d.Data_Donatie.strftime else d.Data_Donatie }}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 40px; color: #999;">
+                    Momentan nu s-au înregistrat donații.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="/" class="back-link">← Înapoi la Dashboard</a>
+</div>
+
+</body>
+</html>

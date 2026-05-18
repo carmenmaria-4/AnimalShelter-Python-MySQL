@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Echipa de Voluntari</title>
+    <style>
+        :root { --primary: #27ae60; --dark: #2c3e50; --danger: #e74c3c; --blue: #3498db; --warning: #f39c12; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; padding: 40px; color: var(--dark); }
+        
+        .container { 
+            max-width: 900px; margin: auto; background: white; 
+            padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+        }
+
+        h1 { border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; }
+
+        .team-description {
+            background: #f0f7ff; 
+            padding: 20px; 
+            border-radius: 10px; 
+            margin-bottom: 30px; 
+            border-left: 5px solid var(--blue);
+            line-height: 1.6;
+        }
+
+        .add-form-container {
+            background: #fff;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .add-form-container h3 { margin-top: 0; color: var(--dark); font-size: 1.1rem; }
+
+        .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+        .form-row input, .form-row select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .form-row input:focus, .form-row select:focus { border-color: var(--primary); }
+
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-submit:hover { background: #219150; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background: var(--dark); color: white; padding: 12px; text-align: left; }
+        td { padding: 12px; border-bottom: 1px solid #eee; }
+        tr:hover { background: #f9f9f9; }
+
+        .actions-cell {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-action {
+            text-decoration: none; 
+            font-weight: bold; 
+            font-size: 0.85rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: 0.2s;
+            display: inline-block;
+        }
+
+        .btn-edit { color: var(--blue); border: 1px solid var(--blue); }
+        .btn-edit:hover { background: var(--blue); color: white; }
+
+        .btn-delete { color: var(--danger); border: 1px solid var(--danger); }
+        .btn-delete:hover { background: var(--danger); color: white; }
+
+        .back-link { 
+            display: inline-block; margin-top: 20px; color: var(--primary); 
+            text-decoration: none; font-weight: bold; 
+        }
+
+        .flash-msg {
+            padding: 10px;
+            background: #d4edda;
+            color: #155724;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🤝 Echipa de Voluntari</h1>
+    
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="flash-msg">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="team-description">
+        <p>Echipa noastră este inima acestui proiect. Suntem un grup dedicat de specialiști și entuziaști care se asigură că fiecare animal primește atenția și îngrijirea necesară. Mai jos găsești lista membrilor noștri activi.</p>
+    </div>
+
+    <div class="add-form-container">
+        <h3>➕ Adaugă un voluntar nou</h3>
+        <form method="POST" action="{{ url_for('lista_voluntari') }}" class="form-row">
+            <input type="text" name="nume" placeholder="Nume complet" required>
+            
+            <select name="rol" required>
+                <option value="" disabled selected>Alege Rolul</option>
+                <option value="Dresor">Dresor</option>
+                <option value="Asistent Medical">Asistent Medical</option>
+                <option value="Coordonator">Coordonator</option>
+                <option value="Îngrijitor">Îngrijitor</option>
+                <option value="Medic Veterinar">Medic Veterinar</option>
+                <option value="Specialist Adopții">Specialist Adopții</option>
+                <option value="Voluntar General">Voluntar General</option>
+            </select>
+
+            <select name="id_adapost" required>
+                <option value="" disabled selected>Alege Centrul</option>
+                {% for a in adaposturi %}
+                    <option value="{{ a.ID_Adapost }}">{{ a.Nume_Adapost }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="btn-submit">Înregistrează</button>
+        </form>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Membru</th>
+                <th>Specializare / Rol</th>
+                <th>Centru Lucru</th>
+                <th style="text-align: center;">Gestionare</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for v in voluntari %}
+            <tr>
+                <td><strong>{{ v.Nume }}</strong></td>
+                <td>{{ v.Rol }}</td>
+                <td>{{ v.Nume_Adapost }}</td>
+                <td>
+                    <div class="actions-cell">
+                        <a href="{{ url_for('editeaza_voluntar', id_voluntar=v.ID_Voluntar) }}" class="btn-action btn-edit">
+                            ✏️ Editează
+                        </a>
+                        
+                        <a href="{{ url_for('sterge_voluntar', id_voluntar=v.ID_Voluntar) }}" 
+                           class="btn-action btn-delete"
+                           onclick="return confirm('Sigur vrei să elimini acest voluntar din listă?')">
+                            ❌ Elimină
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="/" class="back-link">← Înapoi la pagina principală</a>
+</div>
+
+</body>
+</html>

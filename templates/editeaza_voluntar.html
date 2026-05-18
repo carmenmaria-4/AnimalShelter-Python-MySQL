@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Editează Voluntar</title>
+    <style>
+        :root { --primary: #27ae60; --dark: #2c3e50; --blue: #3498db; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; padding: 40px; color: var(--dark); }
+        
+        .container { 
+            max-width: 500px; margin: auto; background: white; 
+            padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+        }
+
+        h2 { border-bottom: 2px solid var(--blue); padding-bottom: 10px; margin-bottom: 25px; font-size: 1.5rem; }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            box-sizing: border-box;
+            font-size: 1.0rem;
+        }
+
+        input[type="text"]:focus, select:focus {
+            border-color: var(--blue);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .btn-save {
+            background: var(--blue);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            flex: 2;
+            transition: 0.3s;
+        }
+
+        .btn-save:hover { background: #2980b9; }
+
+        .btn-cancel {
+            background: #e0e0e0;
+            color: #333;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            flex: 1;
+            transition: 0.3s;
+        }
+
+        .btn-cancel:hover { background: #d5d5d5; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>✏️ Modifică Voluntar</h2>
+    
+    <form method="POST">
+        <div class="form-group">
+            <label>Nume Voluntar:</label>
+            <input type="text" value="{{ voluntar.Nume }}" readonly style="background: #f0f0f0; color: #7f8c8d; cursor: not-allowed;">
+        </div>
+
+        <div class="form-group">
+            <label for="rol">Alege noul rol din sistem:</label>
+            <select name="rol" id="rol" required>
+                <option value="Dresor" {% if voluntar.Rol == 'Dresor' %} selected {% endif %}>Dresor</option>
+                <option value="Asistent Medical" {% if voluntar.Rol == 'Asistent Medical' %} selected {% endif %}>Asistent Medical</option>
+                <option value="Coordonator" {% if voluntar.Rol == 'Coordonator' %} selected {% endif %}>Coordonator</option>
+                <option value="Îngrijitor" {% if voluntar.Rol == 'Îngrijitor' %} selected {% endif %}>Îngrijitor</option>
+                <option value="Medic Veterinar" {% if voluntar.Rol == 'Medic Veterinar' %} selected {% endif %}>Medic Veterinar</option>
+                <option value="Specialist Adopții" {% if voluntar.Rol == 'Specialist Adopții' %} selected {% endif %}>Specialist Adopții</option>
+                <option value="Voluntar General" {% if voluntar.Rol == 'Voluntar General' %} selected {% endif %}>Voluntar General</option>
+            </select>
+        </div>
+        
+        <div class="btn-group">
+            <button type="submit" class="btn-save">Salvează modificarea</button>
+            <a href="{{ url_for('lista_voluntari') }}" class="btn-cancel">Anulează</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
