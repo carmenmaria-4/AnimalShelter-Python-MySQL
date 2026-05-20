@@ -6,7 +6,7 @@ Aplicația este construită pe o arhitectură robustă, utilizând **Python (Fla
 
 ---
 ### Demo Proiect
-<video src="https://github.com/carmenmaria-4/Animal-Shelter-Management-System/raw/main/demo_video" width="100%" controls></video>
+<video src="https://github.com/carmenmaria-4/Animal-Shelter-Management-System/raw/main/demo_video.mp4" width="100%" controls></video>
 
 ## 🌟 Funcționalități și Module Principale
 
