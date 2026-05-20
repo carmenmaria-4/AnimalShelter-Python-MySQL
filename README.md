@@ -5,6 +5,11 @@
 Aplicația este construită pe o arhitectură robustă, utilizând **Python (Flask)** pentru logica de business și **MySQL** pentru o stocare securizată, garantând integritatea datelor prin motorul **InnoDB**.
 
 ---
+### Demo Proiect
+
+
+
+---
 
 ## 🌟 Funcționalități și Module Principale
 
