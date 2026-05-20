@@ -6,7 +6,7 @@ Aplicația este construită pe o arhitectură robustă, utilizând **Python (Fla
 
 ---
 ### Demo Proiect
-<video src="./Adopții România _ Acasă.mp4" width="100%" controls></video>
+<video src="./demo_video.mp4" width="100%" controls></video>
 
 ## 🌟 Funcționalități și Module Principale
 
