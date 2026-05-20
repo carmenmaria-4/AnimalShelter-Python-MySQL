@@ -5,8 +5,9 @@
 Aplicația este construită pe o arhitectură robustă, utilizând **Python (Flask)** pentru logica de business și **MySQL** pentru o stocare securizată, garantând integritatea datelor prin motorul **InnoDB**.
 
 ---
-### Demo Proiect
-<video src="https://github.com/carmenmaria-4/Animal-Shelter-Management-System/raw/main/demo_video.mp4" width="100%" controls></video>
+## 📺 Demo Aplicație
+[Deschide videoclipul de prezentare al proiectului](https://github.com/carmenmaria-4/Animal-Shelter-Management-System/blob/main/demo_video.mp4)
+*(Fă click pe imagine pentru a vedea clipul)*
 
 ## 🌟 Funcționalități și Module Principale
 
